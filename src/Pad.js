@@ -13,46 +13,34 @@ const Pad =({id,label,audioSrc,power}) => {
   const audioRef = useRef(null);
 
   let style = {
-    cursor: 'pointer',
-    userSelect: 'none',
-    textAlign: 'center',
-    width: '100px',
     height: height,
-    paddingTop: '30px',
     backgroundColor: backgroundColor,
-    marginRight: '10px',
     marginTop: marginTop,
-    fontWeight: 'bold',
-    borderRadius: '10px',
     boxShadow: boxShadow
     }
   
   useEffect(()=>{
-    window.addEventListener('keydown',handleKeyDown);
-    //Clean up the event listener on component unmount
+    document.addEventListener('keydown',handleKeyDown);
     return ()=>{
-      window.removeEventListener('keydown',handleKeyDown);
+    document.removeEventListener('keydown',handleKeyDown);
     };
-  }, []);
+  }, [power]);
 
   useEffect(()=>{
-    window.addEventListener('keyup',handleKeyUp);
-    //Clean up the event listener on component unmount
+    document.addEventListener('keyup',handleKeyUp);
     return ()=>{
-      window.removeEventListener('keyup',handleKeyUp);
+    document.removeEventListener('keyup',handleKeyUp);
     };
-  }, []);
+  }, [power]);
 
   const handleMouseDown = ()=>{
-    console.log('mouse:',power);
     setBoxShadow('none');
     setBackgroundColor('orange');
     setMarginTop('13px');
     setHeight('42px')
-    if (power && audioRef.current) {
-      audioRef.current.currentTime = 0;
+    if (power) {
       audioRef.current.play();
-    };
+    }
   };
 
   const handleMouseUp = ()=>{
@@ -64,15 +52,15 @@ const Pad =({id,label,audioSrc,power}) => {
 
   const handleKeyDown = (event)=>{ 
     if (event.key.toUpperCase() === label.toUpperCase()){
-      console.log('key:',power);
+      
       setBoxShadow('none');
       setBackgroundColor('orange');
       setMarginTop('13px');
       setHeight('42px');
-      if (power && audioRef.current){
-        audioRef.current.currentTime = 0;
+      if (power)
+      {
         audioRef.current.play();
-      }
+      };
     }   
   };
 
@@ -87,9 +75,11 @@ const Pad =({id,label,audioSrc,power}) => {
     <div
       id = {id}
       className='drum-pad'
-      // tabIndex={0} //Makes the div focusable and allows key events
+      tabIndex={0} //Makes the div focusable and allows key events
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
+      onKeyDown={handleKeyDown}
+      onKeyUp={handleKeyUp}
       style={style}
     >
       {label}

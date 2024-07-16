@@ -37,6 +37,16 @@ body {
   align-items: center;
 }
 
+.drum-pad {
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  padding-top: 30px;
+  border-radius: 10px;
+  font-weight: bold;
+  margin-right: 10px;
+  width: 100px;
+}
 
 /* 
   ##Device = Desktops
