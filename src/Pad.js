@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 
 
-const Pad =({id,label,audioSrc,power}) => {
+const Pad =({id,label,audioSrc,power, setDisplay, volume}) => {
   //Styling state of Pad
   const [boxShadow, setBoxShadow] = useState('black 3px 3px 5px');
   const [backgroundColor, setBackgroundColor] = useState('grey');
@@ -40,6 +40,7 @@ const Pad =({id,label,audioSrc,power}) => {
     setHeight('42px')
     if (power) {
       audioRef.current.play();
+      setDisplay(id);
     }
   };
 
@@ -60,6 +61,7 @@ const Pad =({id,label,audioSrc,power}) => {
       if (power)
       {
         audioRef.current.play();
+        setDisplay(id);
       };
     }   
   };
@@ -70,6 +72,13 @@ const Pad =({id,label,audioSrc,power}) => {
     setMarginTop('10px');
     setHeight('45px');
   };
+
+  //Set volume level after receive volumn value
+  useEffect(()=>{
+    if(audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, [volume]);
 
   return (
     <div
@@ -92,6 +101,9 @@ Pad.propTypes = {
   id: PropTypes.string,
   label: PropTypes.string.isRequired,
   audioSrc: PropTypes.string,
+  power: PropTypes.bool.isRequired,
+  setDisplay: PropTypes.func.isRequired,
+  volume: PropTypes.number.isRequired
 }
 
 export default Pad
