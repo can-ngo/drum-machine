@@ -1,72 +1,128 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import './App.css';
 import Pad from './Pad';
 import './SwitchButton.css';
-import './VolumeSlider.css';
-import PropTypes from 'prop-types';
 
 const bankOne = [{
-    "label": "Q",
-    "soundname": "Heater-1",
-    "url": "https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3"
-  },
-  {
-    "label": "W",
-    "soundname": "Heater-2",
-    "url": "https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3"
-  },
-  {
-    "label": "E",
-    "soundname": "Heater-3",
-    "url": "https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3"
-  },
-  {
-    "label": "A",
-    "soundname": "Heater-4",
-    "url": "https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3"
-  },
-  {
-    "label": "S",
-    "soundname": "Clap",
-    "url": "https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3"
-  },
-  {
-    "label": "D",
-    "soundname": "Open-HH",
-    "url": "https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3"
-  },
-  {
-    "label": "Z",
-    "soundname": "Kick-n-Hat",
-    "url": "https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3"
-  },
-  {
-    "label": "X",
-    "soundname": "Kick",
-    "url": "https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3"
-  },
-  {
-    "label": "C",
-    "soundname": "Closed-HH",
-    "url": "https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3"
-  }
+  "key": 1,
+  "label": "Q",
+  "soundname": "Heater-1",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3"
+},
+{
+  "key": 2,
+  "label": "W",
+  "soundname": "Heater-2",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3"
+},
+{
+  "key": 3,
+  "label": "E",
+  "soundname": "Heater-3",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3"
+},
+{
+  "key": 4,
+  "label": "A",
+  "soundname": "Heater-4",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3"
+},
+{
+  "key": 5,
+  "label": "S",
+  "soundname": "Clap",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3"
+},
+{
+  "key": 6,
+  "label": "D",
+  "soundname": "Open-HH",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3"
+},
+{
+  "key": 7,
+  "label": "Z",
+  "soundname": "Kick-n-Hat",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3"
+},
+{
+  "key": 8,
+  "label": "X",
+  "soundname": "Kick",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3"
+},
+{
+  "key": 9,
+  "label": "C",
+  "soundname": "Closed-HH",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3"
+}
+]
+
+const bankTwo = [{
+  "label": "Q",
+  "soundname": "Chord-1",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/Chord_1.mp3"
+},
+{
+  "label": "W",
+  "soundname": "Chord-2",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/Chord_2.mp3"
+},
+{
+  "label": "E",
+  "soundname": "Chord-3",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/Chord_3.mp3"
+},
+{
+  "label": "A",
+  "soundname": "Shaker",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/Give_us_a_light.mp3"
+},
+{
+  "label": "S",
+  "soundname": "Open-HH",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/Dry_Ohh.mp3"
+},
+{
+  "label": "D",
+  "soundname": "Closed-HH",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/Bld_H1.mp3"
+},
+{
+  "label": "Z",
+  "soundname": "Punchy-Kick",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/punchy_kick_1.mp3"
+},
+{
+  "label": "X",
+  "soundname": "Side-Stick",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/side_stick_1.mp3"
+},
+{
+  "label": "C",
+  "soundname": "Snare",
+  "url": "https://s3.amazonaws.com/freecodecamp/drums/Brk_Snr.mp3"
+}
 ]
 
 function App() {
   
   let [power, setPower] = useState(false);
   let [display, setDisplay] = useState('');
-  let [volume, setVolume] = useState(0.5);
+  let [volume, setVolume] = useState(20);
+  
   
   const handleOnClick = ()=>{
     setPower(!power);
     setDisplay('');
   }
 
-  const handleVolumeChange = (value) => {
-    setVolume(value);
+  const handleVolumeChange = (e) => {
+    return setVolume(e.target.value);
   }
 
+  
   //Power switch Component
   const SwitchButton = ({id, onClick, receivedPower}) => {
     return(
@@ -88,28 +144,6 @@ function App() {
       </div>
     )
   }
-
-  //Volume Slider Component
-  const VolumeSlider = ({volume, onVolumeChange}) => {
-    return (
-      <div className='volume-slider'>
-        <p><b>Volume:</b> {volume}</p>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={volume}
-          onChange={(e)=> onVolumeChange(e.target.value)}
-        />
-      </div>
-    )
-  }
-  VolumeSlider.propTypes = {
-    volume: PropTypes.number.isRequired,
-    onVolumeChange: PropTypes.func.isRequired
-  }
-
   
   //Whole Drum Machine component
   return (
@@ -117,7 +151,7 @@ function App() {
       <div className='pad-bank'>
         {
           bankOne.map((item)=>{
-            return <Pad id={item.soundname} label={item.label} power={power} audioSrc={item.url} setDisplay={setDisplay} volume={volume}/>
+            return <Pad key={item.key} id={item.soundname} label={item.label} power={power} audioSrc={item.url} setDisplay={setDisplay} volume={volume/100}/>
           })
         }  
       </div>
@@ -125,11 +159,17 @@ function App() {
         <div className='control'>
           <SwitchButton id='Power' onClick={handleOnClick} receivedPower={power}/>
           <Display id='Display' displayData={display} />
+          <p><b>Volume:</b> {volume}</p>
+          <input
+              id='volume-slider'
+              type="range"
+              min="0"
+              max="100"
+              step="1"
+              value={volume}
+              onChange={handleVolumeChange}
+            /> 
         </div>
-        <div className='volume-slider'>
-          <VolumeSlider volume={volume} onVolumeChange={handleVolumeChange} />
-        </div>
-        <div className='control'></div>
       </div>
     </div>
   );
