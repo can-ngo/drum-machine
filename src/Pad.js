@@ -1,24 +1,23 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 
 
 const Pad =({id,label,audioSrc,power, setDisplay, volume}) => {
   //Styling state of Pad
-  const [boxShadow, setBoxShadow] = useState('black 3px 3px 5px');
-  const [backgroundColor, setBackgroundColor] = useState('grey');
-  const [marginTop, setMarginTop] = useState('10px');
-  const [height, setHeight] = useState('45px');
+  const [initialStyle, setInActiveStyle] = useState({height: '45px', backgroundColor:'grey',marginTop:'10px', boxShadow:'black 3px 3px 5px'});
   //Ref for audio element
   const audioRef = useRef(null);
 
-  let style = {
-    height: height,
-    backgroundColor: backgroundColor,
-    marginTop: marginTop,
-    boxShadow: boxShadow
-    }
+  let activeStyle = {boxShadow: 'none',
+                     backgroundColor:'orange',
+                     marginTop:'13px',
+                     height:'42px'};
   
+  let inActiveStyle = {boxShadow:'black 3px 3px 5px',
+                       backgroundColor:'grey',
+                       marginTop:'10px',
+                       height: '45px' }
+
   useEffect(()=>{
     document.addEventListener('keydown',handleKeyDown);
     return ()=>{
@@ -34,10 +33,7 @@ const Pad =({id,label,audioSrc,power, setDisplay, volume}) => {
   }, [power]);
 
   const handleMouseDown = ()=>{
-    setBoxShadow('none');
-    setBackgroundColor('orange');
-    setMarginTop('13px');
-    setHeight('42px')
+    setInActiveStyle(activeStyle);
     if (power) {
       audioRef.current.play();
       setDisplay(id);
@@ -45,19 +41,12 @@ const Pad =({id,label,audioSrc,power, setDisplay, volume}) => {
   };
 
   const handleMouseUp = ()=>{
-    setBoxShadow('black 3px 3px 5px');
-    setBackgroundColor('grey');
-    setMarginTop('10px');
-    setHeight('45px');
+    setInActiveStyle(inActiveStyle);
   };
 
   const handleKeyDown = (event)=>{ 
-    if (event.key.toUpperCase() === label.toUpperCase()){
-      
-      setBoxShadow('none');
-      setBackgroundColor('orange');
-      setMarginTop('13px');
-      setHeight('42px');
+    if (event.key.toUpperCase() === label.toUpperCase()){   
+      setInActiveStyle(activeStyle);
       if (power)
       {
         audioRef.current.play();
@@ -67,10 +56,7 @@ const Pad =({id,label,audioSrc,power, setDisplay, volume}) => {
   };
 
   const handleKeyUp = ()=>{
-    setBoxShadow('black 3px 3px 5px');
-    setBackgroundColor('grey');
-    setMarginTop('10px');
-    setHeight('45px');
+    setInActiveStyle(inActiveStyle);
   };
 
   //Set volume level after receive volumn value
@@ -91,7 +77,7 @@ const Pad =({id,label,audioSrc,power, setDisplay, volume}) => {
       onKeyUp={handleKeyUp}
       onTouchStart={handleMouseDown}
       onTouchEnd={handleMouseUp}
-      style={style}
+      style={initialStyle}
     >
       {label}
       <audio ref={audioRef} className='clip' id={label} src={audioSrc}></audio>
