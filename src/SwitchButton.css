@@ -8,7 +8,7 @@
     cursor: pointer;
     transition: 0.3s;
   }
-  
+  .switch.bankone,
   .switch.on {
     background-color: #4caf50;
   }
@@ -24,6 +24,7 @@
     transition: left 0.3s;
   }
   
+  .switch.bankone .switch-handle,
   .switch.on .switch-handle {
     left: 26px;
   }

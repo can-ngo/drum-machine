@@ -111,11 +111,16 @@ function App() {
   let [power, setPower] = useState(false);
   let [display, setDisplay] = useState('');
   let [volume, setVolume] = useState(20);
+  let [isBankOne, setIsBankOne] = useState(true);
   
   
-  const handleOnClick = ()=>{
+  const handlePowerClick = ()=>{
     setPower(!power);
     setDisplay('');
+  }
+
+  const handleBankClick = () => {
+    setIsBankOne(!isBankOne);
   }
 
   const handleVolumeChange = (e) => {
@@ -124,7 +129,7 @@ function App() {
 
   
   //Power switch Component
-  const SwitchButton = ({id, onClick, receivedPower}) => {
+  const PowerButton = ({id, onClick, receivedPower}) => {
     return(
         <>
           <p><b>{id}</b></p>
@@ -134,6 +139,20 @@ function App() {
         </>
     )
   }
+
+  //Bank switch button
+  const BankButton = ({id, onClick, receivedBank}) => {
+    return(
+        <>
+          <p><b>{id}</b></p>
+          <div id={id} className={`switch ${receivedBank?'bankone':'banktwo'}`} onClick={onClick} >
+            <div className="switch-handle"></div>
+          </div>
+        </>
+    )
+  }
+
+
 
   //Display Component
   const Display = ({id, displayData}) => {
@@ -150,14 +169,19 @@ function App() {
     <div id="drum-machine" className='container'>
       <div className='pad-bank'>
         {
+          isBankOne?
           bankOne.map((item)=>{
+            return <Pad key={item.key} id={item.soundname} label={item.label} power={power} audioSrc={item.url} setDisplay={setDisplay} volume={volume/100}/>
+          })
+          : bankTwo.map((item)=>{
             return <Pad key={item.key} id={item.soundname} label={item.label} power={power} audioSrc={item.url} setDisplay={setDisplay} volume={volume/100}/>
           })
         }  
       </div>
       <div className='controls-container'>
         <div className='control'>
-          <SwitchButton id='Power' onClick={handleOnClick} receivedPower={power}/>
+          <PowerButton id='Power' onClick={handlePowerClick} receivedPower={power}/>
+          <BankButton id='Bank' onClick={handleBankClick} receivedBank={isBankOne}/>
           <Display id='Display' displayData={display} />
           <p><b>Volume:</b> {volume}</p>
           <input
