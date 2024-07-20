@@ -165,7 +165,7 @@ p {
 @media (min-width: 200px) and (max-width: 480px) {
   .container {
     width: 350px;
-    height: 450px;
+    height: 520px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;

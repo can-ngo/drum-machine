@@ -89,6 +89,8 @@ const Pad =({id,label,audioSrc,power, setDisplay, volume}) => {
       onMouseUp={handleMouseUp}
       onKeyDown={handleKeyDown}
       onKeyUp={handleKeyUp}
+      onTouchStart={handleMouseDown}
+      onTouchEnd={handleMouseUp}
       style={style}
     >
       {label}
